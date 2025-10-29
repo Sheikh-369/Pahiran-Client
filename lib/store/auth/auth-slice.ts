@@ -74,31 +74,38 @@ export function forgotPassword(forgotPasswordData:IUserData){
     return async function forgotPasswordThunk(dispatch:AppDispatch){
         dispatch(setStatus(Status.LOADING))
         try {
-            const response=await API.post("forgot-password",forgotPassword)
+            const response=await API.post("forgot-password",forgotPasswordData)
             if(response.status===200 || response.status===201){
                 dispatch(setStatus(Status.SUCCESS))
-
+                return { success: true, message: response.data.message }
+            }else{
+                dispatch(setStatus(Status.ERROR))
+                return { success: false, message: response.data.message || "Something went wrong" }
             }
-        } catch (error) {
-            
+        } catch (error:any) {
+            console.log(error)
+            return { success: false, message: error.response?.data?.message || "Registration failed" }
         }
     }
 }
 
 //Reset Password
 export function resetPassword(resetPasswordData: IUserData) {
-  return async function (dispatch: AppDispatch) {
+  return async function resetPasswordThunk(dispatch: AppDispatch) {
     dispatch(setStatus(Status.LOADING));
     try {
-      const response = await API.post("auth/reset-password", resetPasswordData);
+      const response = await API.post("reset-password", resetPasswordData);
       if (response.status === 200 || response.status === 201) {
         dispatch(setStatus(Status.SUCCESS));
+        return { success: true, message: response.data.message }
       } else {
         dispatch(setStatus(Status.ERROR));
+        return { success: false, message: response.data.message || "Something went wrong" }
       }
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
       dispatch(setStatus(Status.ERROR));
+      return { success: false, message: error.response?.data?.message || "Registration failed" }
     }
   };
 }

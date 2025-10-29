@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import store from "@/lib/store/store";
 //for toast messages
 import { Toaster } from 'react-hot-toast'
+import { usePathname } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,12 +29,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+    const pathname = usePathname();
+
+  // List of routes where navbar should be hidden
+  const hideNavbarOn = ['/auth/login', '/auth/register', '/auth/forgot-password','/auth/reset-password'];
+
+  const shouldHideNavbar = hideNavbarOn.includes(pathname);
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       ><Provider store={store}>
-        <Navbar/>
+        {!shouldHideNavbar && <Navbar />}
         {children}
         <Toaster position="top-right" reverseOrder={false} />
       </Provider>
