@@ -1,7 +1,7 @@
 import axios from "axios";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const APIWITHTOKEN = axios.create({
-  baseURL: `${BASE_URL}/ecommerce/`,
+  baseURL: `${BASE_URL}/washtra/`,
   headers: {
     Authorization:
       typeof window !== "undefined" ? localStorage.getItem("token") : null,
