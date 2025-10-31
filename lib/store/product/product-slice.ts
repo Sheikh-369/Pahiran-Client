@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProductData, IProductSliceState } from "./product-slice-type";
 import { Status } from "@/lib/global/type";
-import App from "next/app";
 import { AppDispatch } from "../store";
 import APIWITHTOKEN from "@/lib/http/APIWithToken";
 

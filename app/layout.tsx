@@ -32,7 +32,7 @@ export default function RootLayout({
     const pathname = usePathname();
 
   // List of routes where navbar should be hidden
-  const hideNavbarOn = ['/auth/login', '/auth/register', '/auth/forgot-password','/auth/reset-password'];
+  const hideNavbarOn = ['/auth/login', '/auth/register', '/auth/forgot-password','/auth/reset-password','/admin/dashboard','/admin/dashboard/products','/admin/dashboard/sub-categories'];
 
   const shouldHideNavbar = hideNavbarOn.includes(pathname);
   return (

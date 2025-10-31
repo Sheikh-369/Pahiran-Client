@@ -62,6 +62,9 @@ function UserLoginForm() {
         <div className="space-y-2">
           <button
             type="button"
+              onClick={() => {
+                window.location.href = "http://localhost:5000/washtra/auth/google";
+              }}
             className="social-btn w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
