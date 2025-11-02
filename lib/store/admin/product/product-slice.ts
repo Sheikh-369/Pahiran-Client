@@ -3,6 +3,7 @@ import { IAdminProductData, IAdminProductSliceState } from "./product-slice-type
 import { Status } from "@/lib/global/type";
 import { AppDispatch } from "../../store";
 import APIWITHTOKEN from "@/lib/http/APIWithToken";
+import API from "@/lib/http/API";
 
 const initialState:IAdminProductSliceState={
     product:[],
@@ -66,11 +67,10 @@ export function createAdminProduct(productData:IAdminProductData){
     return async function createAdminProductThunk(dispatch:AppDispatch){
         dispatch(setStatus(Status.LOADING))
         try {
-            const response=await APIWITHTOKEN.post(`product`,productData,{
+            const response=await API.post(`product`,productData,{
                 headers:{"Content-Type":"multipart/form-data"}
             })
-            if(response.status===201){
-                dispatch(setProduct(response.data.product))
+            if(response.status===200 || response.status===201){
                 dispatch(setStatus(Status.SUCCESS))
                 dispatch(fetchAllAdminProducts())
             }else{
@@ -87,11 +87,10 @@ export function updateAdminProduct(id:string,productData:IAdminProductData){
     return async function updateAdminProductThunk(dispatch:AppDispatch){
         dispatch(setStatus(Status.LOADING))
         try {
-            const response=await APIWITHTOKEN.put(`product/${id}`,productData,{
+            const response=await APIWITHTOKEN.patch(`product/${id}`,productData,{
                 headers:{"Content-Type":"multipart/form-data"}
             })
             if(response.status===200){
-                dispatch(setProduct(response.data.product))
                 dispatch(setStatus(Status.SUCCESS))
                 dispatch(fetchAllAdminProducts())
             }else{

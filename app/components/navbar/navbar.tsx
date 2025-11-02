@@ -1,8 +1,14 @@
 'use client'
+import { setUser } from "@/lib/store/auth/auth-slice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
 import Link from "next/link";
 import React from "react";
 
 function Navbar() {
+  //user login/logout logic
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.authSlice); // ensure slice name matches
+
   return (
     <div>
       <meta charSet="UTF-8" />
@@ -273,24 +279,27 @@ function Navbar() {
             {/* Right side icons */}
             <div className="flex items-center space-x-4">
               {/* Account */}{" "}
-              <Link href="/auth/register">
-                <button className="text-gray-700 hover:text-blue-600 transition-colors duration-200 cursor-pointer">
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            <div className="flex items-center space-x-4">
+              {user ? (
+                // Logged-in state → show only "Logout"
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("token"); // remove auth token
+                    dispatch(setUser(null)); // reset user state
+                  }}
+                  className="text-gray-700 hover:text-blue-600 transition-colors duration-200 cursor-pointer"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </button>{" "}
-              </Link>
-              
+                  Logout
+                </button>
+              ) : (
+                // Logged-out state → show only "Login"
+                <Link href="/auth/login">
+                  <button className="text-gray-700 hover:text-blue-600 transition-colors duration-200 cursor-pointer">
+                    Login
+                  </button>
+                </Link>
+              )}
+            </div>              
               {/* Wishlist */}{" "}
               <button className="text-gray-700 hover:text-red-600 transition-colors duration-200 relative">
                 <svg

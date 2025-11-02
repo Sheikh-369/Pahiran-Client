@@ -51,8 +51,45 @@ export function createNewCategory(categoryData: ICategoryData) {
         try {
             const response = await APIWITHTOKEN.post(`category`, categoryData);
             if (response.status === 201 || response.status === 200) {
-                dispatch(fetchAllCategories() as any); // Refresh list after creation
                 dispatch(setStatus(Status.SUCCESS));
+                dispatch(fetchAllCategories()); // Refresh list after creation
+            } else {
+                dispatch(setStatus(Status.ERROR));
+            }
+        } catch (error) {
+            dispatch(setStatus(Status.ERROR));
+        }
+    };
+}
+
+
+// Thunk to update a category
+export function updateCategory(updateCategoryData: ICategoryData,id:string) {
+    return async function updateCategoryThunk(dispatch: AppDispatch) {
+        dispatch(setStatus(Status.LOADING));
+        try {
+            const response = await APIWITHTOKEN.patch(`category/${id}`, updateCategoryData);
+            if (response.status === 201 || response.status === 200) {
+                dispatch(setStatus(Status.SUCCESS));
+                dispatch(fetchAllCategories()); // Refresh list after creation
+            } else {
+                dispatch(setStatus(Status.ERROR));
+            }
+        } catch (error) {
+            dispatch(setStatus(Status.ERROR));
+        }
+    };
+}
+
+// Thunk to update a category
+export function deleteCategory(id:string) {
+    return async function deleteCategoryThunk(dispatch: AppDispatch) {
+        dispatch(setStatus(Status.LOADING));
+        try {
+            const response = await APIWITHTOKEN.delete(`category/${id}`);
+            if (response.status === 201 || response.status === 200) {
+                dispatch(setStatus(Status.SUCCESS));
+                dispatch(fetchAllCategories()); // Refresh list after creation
             } else {
                 dispatch(setStatus(Status.ERROR));
             }

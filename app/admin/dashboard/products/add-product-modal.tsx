@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
 import { IAdminProductData } from "@/lib/store/admin/product/product-slice-type";
 import { fetchAllCategories } from "@/lib/store/admin/category/category-slice";
 import { fetchAllSubCategories } from "@/lib/store/admin/sub-category/sub-category-slice";
+import { createAdminProduct } from "@/lib/store/admin/product/product-slice";
 
 
 interface AddProductModalProps {
@@ -45,7 +46,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
       alert("Please fill in product name, price, and category.");
       return;
     }
-    onSubmit(formData);
+    // onSubmit(formData);
+    dispatch(createAdminProduct(formData))
     onClose();
   };
 

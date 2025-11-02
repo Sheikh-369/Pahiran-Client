@@ -2,15 +2,28 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
 import { ISubCategoryData } from "@/lib/store/admin/sub-category/sub-category-slice-type";
-import { createNewSubCategory, fetchAllSubCategories } from "@/lib/store/admin/sub-category/sub-category-slice";
+import { createNewSubCategory, deleteSubCategory, fetchAllSubCategories, updateSubCategory } from "@/lib/store/admin/sub-category/sub-category-slice";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import EditSubCategoryModal from "./edit-sub-category-modal";
+import DeleteSubCategoryModal from "./delete-sub-category-modal";
 
 const SubCategoryDashboard = () => {
   const dispatch = useAppDispatch();
   const { subCategories } = useAppSelector((state) => state.subCategorySlice);
+  //add sub-category
   const [showModal, setShowModal] = useState(false);
   const [subCategoryData, setSubCategoryData] = useState<ISubCategoryData>({ subCategoryName: "" });
+  // edit sub-category
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<ISubCategoryData | null>(null);
+  //delete sub-category
+  // delete sub-category
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedToDelete, setSelectedToDelete] = useState<ISubCategoryData | null>(null);
+
+  
+  //search sub-category
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -36,7 +49,7 @@ const SubCategoryDashboard = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-sky-100 min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-3">
         <h1 className="text-2xl font-bold text-gray-800">SubCategories</h1>
@@ -61,9 +74,9 @@ const SubCategoryDashboard = () => {
 
       {/* Table */}
       <div className="flex justify-center">
-        <div className="w-full md:w-2/3 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+        <div className="w-full md:w-2/3 bg-sky-300 rounded-xl shadow-lg overflow-hidden border border-gray-200">
           <table className="w-full text-sm text-gray-700">
-            <thead className="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
+            <thead className="bg-blue-500 text-gray-600 uppercase text-xs tracking-wider">
               <tr>
                 <th className="px-8 py-4 text-left font-semibold">Subcategory Name</th>
                 <th className="px-8 py-4 text-center font-semibold">Actions</th>
@@ -79,19 +92,53 @@ const SubCategoryDashboard = () => {
                   <td className="px-8 py-4 text-center">
                     <div className="flex justify-center gap-3">
                       <button
-                        onClick={() => alert(`Edit category with id: ${sub.id}`)}
+                        onClick={() => {
+                          setSelectedSubCategory(sub);
+                          setShowEditModal(true);
+                        }}
                         aria-label="Edit"
-                        className="p-2 bg-yellow-50 hover:bg-yellow-100 text-yellow-600 rounded-lg transition-all shadow-sm hover:shadow-md"
+                        className="p-2 bg-sky-200 hover:bg-yellow-100 text-yellow-600 rounded-lg transition-all shadow-sm hover:shadow-md"
                       >
-                        <EditIcon className="text-[20px]" />
+                        <EditIcon fontSize="small" />
                       </button>
+                      {/* Edit Modal */}
+                      {showEditModal && (
+                          <EditSubCategoryModal
+                            isOpen={showEditModal}
+                            onClose={() => setShowEditModal(false)}
+                            subCategory={selectedSubCategory}
+                            onSave={(updatedData) => {
+                              if (selectedSubCategory?.id) {
+                                dispatch(updateSubCategory(updatedData, selectedSubCategory.id) as any);
+                                setShowEditModal(false);
+                              }
+                            }}
+                          />
+                        )}
                       <button
-                        onClick={() => handleDelete(sub.id!)}
+                        onClick={() => {
+                          setSelectedToDelete(sub);
+                          setShowDeleteModal(true);
+                        }}
                         aria-label="Delete"
-                        className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-all shadow-sm hover:shadow-md"
+                        className="p-2 bg-sky-200 hover:bg-red-300 text-red-600 rounded-lg transition-all shadow-sm hover:shadow-md"
                       >
-                        <DeleteIcon className="text-[20px]" />
+                        <DeleteIcon fontSize="small" />
                       </button>
+                      {/* Delete Modal */}
+                      {showDeleteModal && (
+                        <DeleteSubCategoryModal
+                          isOpen={showDeleteModal}
+                          onClose={() => setShowDeleteModal(false)}
+                          subCategoryName={selectedToDelete?.subCategoryName}
+                          onConfirm={() => {
+                            if (selectedToDelete?.id) {
+                              dispatch(deleteSubCategory(selectedToDelete.id) as any);
+                              setShowDeleteModal(false);
+                            }
+                          }}
+                        />
+                      )}
                     </div>
                   </td>
                 </tr>

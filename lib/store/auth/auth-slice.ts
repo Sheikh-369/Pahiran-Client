@@ -3,6 +3,7 @@ import { IUserData, IUserSliceState } from "./auth-slice-type";
 import { Status } from "@/lib/global/type";
 import { AppDispatch } from "../store";
 import API from "@/lib/http/API";
+import APIWITHTOKEN from "@/lib/http/APIWithToken";
 
 const initialState:IUserSliceState={
     user:null,
@@ -13,7 +14,7 @@ const userSlice=createSlice({
     name:"authSlice",
     initialState,
     reducers:{
-        setUser(state:IUserSliceState,action:PayloadAction<IUserData>){
+        setUser(state:IUserSliceState,action:PayloadAction<IUserData | null>){
             state.user=action.payload
         },
 
@@ -48,6 +49,7 @@ export function userRegister(userData:IUserData){
     }
 }
 
+//user login
 export function userLogin(loginData:IUserData){
     return async function userLoginThunk(dispatch:AppDispatch){
         dispatch(setStatus(Status.LOADING))
@@ -70,6 +72,7 @@ export function userLogin(loginData:IUserData){
     }
 }
 
+//forgot password
 export function forgotPassword(forgotPasswordData:IUserData){
     return async function forgotPasswordThunk(dispatch:AppDispatch){
         dispatch(setStatus(Status.LOADING))
@@ -108,4 +111,23 @@ export function resetPassword(resetPasswordData: IUserData) {
       return { success: false, message: error.response?.data?.message || "Registration failed" }
     }
   };
+}
+
+//fetch all users
+export function fetchAllUsers(){
+    return async function fetchAllUsersThunk(dispatch:AppDispatch){
+        dispatch(setStatus(Status.LOADING))
+        try {
+            const response=await APIWITHTOKEN.get("/customers")
+            if(response.status===200 || response.status===201){
+                dispatch(setUser(response.data.data))
+                dispatch(setStatus(Status.SUCCESS))
+            }else{
+                dispatch(setStatus(Status.ERROR))
+            }
+        } catch (error:any) {
+            console.log(error)
+            dispatch(setStatus(Status.ERROR))
+        }
+    }
 }

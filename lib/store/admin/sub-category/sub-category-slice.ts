@@ -56,8 +56,44 @@ export function createNewSubCategory(data: ISubCategoryData) {
     try {
       const response = await APIWITHTOKEN.post(`sub-category`, data);
       if (response.status === 200 || response.status === 201) {
-        dispatch(addSubCategory(response.data.subCategory));
         dispatch(setStatus(Status.SUCCESS));
+        dispatch(fetchAllSubCategories());
+      } else {
+        dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error) {
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
+
+// ✅ Update a subcategory
+export function updateSubCategory(updateSubcategoryData: ISubCategoryData,id:string) {
+  return async function updateSubCategoryThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIWITHTOKEN.patch(`sub-category/${id}`, updateSubcategoryData);
+      if (response.status === 200 || response.status === 201) {
+        dispatch(setStatus(Status.SUCCESS));
+        dispatch(fetchAllSubCategories());
+      } else {
+        dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error) {
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
+
+//delete sub-category
+export function deleteSubCategory(id:string) {
+  return async function deleteSubCategoryThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIWITHTOKEN.delete(`sub-category/${id}`);
+      if (response.status === 200 || response.status === 201) {
+        dispatch(setStatus(Status.SUCCESS));
+        dispatch(fetchAllSubCategories());
       } else {
         dispatch(setStatus(Status.ERROR));
       }

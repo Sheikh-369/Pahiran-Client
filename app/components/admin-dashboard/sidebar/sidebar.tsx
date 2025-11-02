@@ -5,7 +5,7 @@ function AdminSideBar() {
   return (
     <>
               {/* Sidebar */}
-        <aside className="w-64 bg-white shadow-lg border-r border-gray-200 shrink-0">
+        <aside className="w-64 bg-sky-200 shadow-lg border-r border-gray-200 shrink-0">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
@@ -120,8 +120,8 @@ function AdminSideBar() {
                 Subcategories
                 </Link>
 
-              <a
-                href="#"
+              <Link
+                href="/admin/dashboard/customers"
                 className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <svg
@@ -138,7 +138,7 @@ function AdminSideBar() {
                   />
                 </svg>{" "}
                 Customers{" "}
-              </a>{" "}
+              </Link>{" "}
               <a
                 href="#"
                 className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"

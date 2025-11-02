@@ -5,12 +5,45 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
 import React, { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import EditCategoryModal from "./edit-category-modal";
+import DeleteCategoryModal from "./delete-category-modal";
 
 const CategoryDashboard = () => {
     const dispatch = useAppDispatch();
     const { categories, status } = useAppSelector((state) => state.categorySlice);
+    //add category
     const [showModal, setShowModal] = useState(false);
     const [categoryData, setCategoryData] = useState<ICategoryData>({ categoryName: "", categoryDescription: "" });
+    //edit category 
+      // Track which category is being edited
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const handleEditClick = (category: any) => {
+        setSelectedCategory(category);
+        setShowEditModal(true);
+    };
+
+  const handleCloseModal = () => {
+        setSelectedCategory(null);
+        setShowEditModal(false);
+    };
+
+    //delete category
+      const [categoryToDelete, setCategoryToDelete] = useState<{ id?: string; name?: string } | null>(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const handleDeleteClick = (cat: { id?: string; categoryName?: string }) => {
+            setCategoryToDelete({ id: cat.id, name: cat.categoryName });
+            setShowDeleteModal(true);
+        };
+
+    const closeDeleteModal = () => {
+        setShowDeleteModal(false);
+        setCategoryToDelete(null);
+    };
+
+  //search logic
     const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
@@ -27,10 +60,6 @@ const CategoryDashboard = () => {
         }
     };
 
-    const handleDelete = (id: string) => {
-        // Implement delete logic here
-        alert(`Delete category with id: ${id}`);
-    };
 
     const filteredCategories = categories.filter(cat =>
         cat.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -61,36 +90,50 @@ const CategoryDashboard = () => {
 
             <div className="overflow-x-auto bg-white rounded-lg shadow border border-gray-200">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-blue-400">
                         <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-white-500 uppercase tracking-wider">Name</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-white-500 uppercase tracking-wider">Description</th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-white-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-sky-200 divide-y divide-gray-200">
                         {filteredCategories.map((cat) => (
-                            <tr key={cat.id} className="hover:bg-gray-50 transition">
-                                <td className="px-6 py-4 text-sm font-medium text-gray-900">{cat.categoryName}</td>
-                                <td className="px-6 py-4 text-sm text-gray-500">{cat.categoryDescription || "-"}</td>
+                            <tr key={cat.id} className="hover:bg-sky-300 transition">
+                                <td className="px-6 py-4 text-sm font-medium text-white-900">{cat.categoryName}</td>
+                                <td className="px-6 py-4 text-sm text-white-500">{cat.categoryDescription || "-"}</td>
 <td className="px-6 py-4 text-center flex justify-center gap-4">
   {/* Edit Icon */}
   <button
-    onClick={() => alert(`Edit category with id: ${cat.id}`)}
+    onClick={() => handleEditClick(cat)}
     aria-label="Edit"
     className="text-yellow-500 hover:text-yellow-600 transition-colors duration-200 focus:outline-none"
   >
-    <EditIcon className="h-6 w-6" />
+    <EditIcon fontSize="small" />
   </button>
+        {/* Show modal only when editing */}
+      {showEditModal && selectedCategory && (
+        <EditCategoryModal
+          category={selectedCategory}
+          closeModal={handleCloseModal}
+        />
+      )}
 
   {/* Delete Icon */}
   <button
-    onClick={() => handleDelete(cat.id!)}
+    onClick={() => handleDeleteClick(cat)}
     aria-label="Delete"
     className="text-red-500 hover:text-red-600 transition-colors duration-200 focus:outline-none"
   >
-    <DeleteIcon className="h-6 w-6" />
+    <DeleteIcon fontSize="small" />
   </button>
+        {showDeleteModal && categoryToDelete && (
+        <DeleteCategoryModal
+          categoryId={categoryToDelete.id}
+          categoryName={categoryToDelete.name}
+          onClose={closeDeleteModal}
+        />
+      )}
 </td>
 
                             </tr>

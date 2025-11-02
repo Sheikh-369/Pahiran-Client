@@ -15,5 +15,6 @@ export interface IProductData{
 
 export interface IProductSliceState{
     product:IProductData | null,
-    status:Status
+    status:Status,
+    categoryProducts: Record<string, IProductData[]>;
 }

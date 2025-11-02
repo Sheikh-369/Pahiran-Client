@@ -13,7 +13,7 @@ export default function AdminDashboardLayout({
       {/* Main section */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header (extracted from AdminDashboard) */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-sky-300 shadow-sm border-b border-gray-200">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div>

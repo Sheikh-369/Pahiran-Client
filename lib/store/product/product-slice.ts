@@ -3,9 +3,11 @@ import { IProductData, IProductSliceState } from "./product-slice-type";
 import { Status } from "@/lib/global/type";
 import { AppDispatch } from "../store";
 import APIWITHTOKEN from "@/lib/http/APIWithToken";
+import API from "@/lib/http/API";
 
 const initialState:IProductSliceState = {
     product: null,
+    categoryProducts: {},
     status:Status.IDLE
 };
 
@@ -18,10 +20,13 @@ const productSlice = createSlice({
         },
         setStatus(state:IProductSliceState, action:PayloadAction<Status>){
             state.status = action.payload;
+        },
+                setCategoryProducts(state,action: PayloadAction<{ category: string; products: IProductData[] }>) {
+            state.categoryProducts[action.payload.category] = action.payload.products;
         }
     }
 })
-export const { setProduct, setStatus } = productSlice.actions;
+export const { setProduct, setStatus,setCategoryProducts } = productSlice.actions;
 export default productSlice.reducer;
 
 //fetch all products
@@ -43,6 +48,7 @@ export function fetchAllProducts() {
         }
     }
 }
+
 //fetch single product by id
 export function fetchProductById(id:string) {
     return async function fetchProductByIdThunk(dispatch: AppDispatch) {
@@ -62,70 +68,23 @@ export function fetchProductById(id:string) {
         }
     }
 }
-//create new product
-export function createProduct(productData:IProductData){
-    return async function createProductThunk(dispatch:AppDispatch){
-        dispatch(setStatus(Status.LOADING));
-        try {
-            const response=await APIWITHTOKEN.post("product", productData,{
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            if(response.status===201){
-                dispatch(setProduct(response.data.product));
-                dispatch(setStatus(Status.SUCCESS));
-                dispatch(fetchAllProducts()); //refresh product list
-            }else{
-                dispatch(setStatus(Status.ERROR));
-            }
 
-        } catch (error) {
-            console.error("Error creating product:", error);
-            dispatch(setStatus(Status.ERROR));
-        }
-    }
-}
-//update existing product
-export function updateProduct(id:string, productData:IProductData){
-    return async function updateProductThunk(dispatch:AppDispatch){
-        dispatch(setStatus(Status.LOADING));
-        try {
-            const response=await APIWITHTOKEN.put(`product/${id}`, productData,{
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            if(response.status===200){
-                dispatch(setProduct(response.data.product));
-                dispatch(setStatus(Status.SUCCESS));
-                dispatch(fetchAllProducts()); //refresh product list
-            }else{
-                dispatch(setStatus(Status.ERROR));
-            }
+//fetch products by category
+export function fetchProductsByCategory(category: string) {
+  return async function fetchProductsByCategoryThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
 
-        } catch (error) {
-            console.error("Error updating product:", error);
-            dispatch(setStatus(Status.ERROR));
-        }
+    try {
+      const response = await API.get(`product/category/${category}`);
+      if (response.status === 200) {
+        dispatch(setCategoryProducts({ category, products: response.data.data }));
+        dispatch(setStatus(Status.SUCCESS));
+      } else {
+        dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch(setStatus(Status.ERROR));
     }
-}
-//delete product
-export function deleteProduct(id:string){
-    return async function deleteProductThunk(dispatch:AppDispatch){
-        dispatch(setStatus(Status.LOADING));
-        try {
-            const response=await APIWITHTOKEN.delete(`product/${id}`);
-            if(response.status===204){
-                dispatch(setStatus(Status.SUCCESS));
-                dispatch(fetchAllProducts()); //refresh product list
-            }else{
-                dispatch(setStatus(Status.ERROR));
-            }
-
-        } catch (error) {
-            console.error("Error deleting product:", error);
-            dispatch(setStatus(Status.ERROR));
-        }
-    }
+  };
 }

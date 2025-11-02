@@ -1,11 +1,13 @@
 "use client";
-import { fetchAllAdminProducts } from "@/lib/store/admin/product/product-slice";
+import { createAdminProduct, fetchAllAdminProducts, updateAdminProduct } from "@/lib/store/admin/product/product-slice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
 import React, { useEffect, useState } from "react";
 import AddProductModal from "./add-product-modal";
-import { createProduct } from "@/lib/store/product/product-slice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { IAdminProductData } from "@/lib/store/admin/product/product-slice-type";
+import EditProductModal from "./edit-product-modal";
+import DeleteProductModal from "./delete-product-modal";
 
 const AdminProductTable: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +16,25 @@ const AdminProductTable: React.FC = () => {
   );
   //adding product
   const [showModal, setShowModal] = useState(false);
+  // For edit modal
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<IAdminProductData | null>(null);
+
+  const handleEditClick = (product: IAdminProductData) => {
+    setSelectedProduct(product);
+    setShowEditModal(true);
+  };
+
+  //for delete
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<IAdminProductData | null>(null);
+
+  const handleDeleteClick = (product: IAdminProductData) => {
+    setProductToDelete(product);
+    setShowDeleteModal(true);
+  };
+
+
   //search product
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -32,7 +53,7 @@ const filteredProducts = product.filter((p) => {
 
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen text-sm">
+    <div className="p-6 bg-sky-100 min-h-screen text-sm">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Products Dashboard</h1>
@@ -45,7 +66,7 @@ const filteredProducts = product.filter((p) => {
         {showModal && (
           <AddProductModal
             onClose={() => setShowModal(false)}
-            onSubmit={(newProduct) => dispatch(createProduct(newProduct))}
+            onSubmit={(newProduct) => dispatch(createAdminProduct(newProduct))}
           />
         )}
       </div>
@@ -62,9 +83,9 @@ const filteredProducts = product.filter((p) => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+      <div className="overflow-x-auto bg-sky-200 shadow-md rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
+          <thead className="bg-blue-400">
             <tr>
               {[
                 "",
@@ -90,7 +111,7 @@ const filteredProducts = product.filter((p) => {
             {filteredProducts.map((p) => (
               <tr
                 key={p.id}
-                className="hover:bg-gray-50 transition duration-150 ease-in-out"
+                className="hover:bg-blue-300 transition duration-150 ease-in-out"
               >
                 <td className="px-4 py-3">
                   <img
@@ -108,7 +129,7 @@ const filteredProducts = product.filter((p) => {
                   {p.productDescription}
                 </td>
                 <td className="px-4 py-3 text-gray-800 font-semibold">
-                  ${p.productPrice}
+                  Rs. {p.productPrice}
                 </td>
                 <td className="px-4 py-3 text-gray-700">{p.productBrand}</td>
                 <td className="px-4 py-3 text-gray-700">{p.productStock}</td>
@@ -127,18 +148,33 @@ const filteredProducts = product.filter((p) => {
                 {/* Actions */}
                 <td className="px-4 py-3 text-center flex justify-center gap-3">
                   <button
+                    onClick={() => handleEditClick(p)}
                     aria-label="Edit"
                     className="text-yellow-500 hover:text-yellow-600 transition-colors duration-200 focus:outline-none"
                   >
-                    <EditIcon className="h-5 w-5" />
+                    <EditIcon fontSize="small"/>
                   </button>
-
+                  {/* Edit Modal */}
+                  {showEditModal && selectedProduct && (
+                    <EditProductModal
+                      product={selectedProduct}
+                      onClose={() => setShowEditModal(false)}
+                    />
+                  )}
                   <button
+                    onClick={() => handleDeleteClick(p)}
                     aria-label="Delete"
                     className="text-red-500 hover:text-red-600 transition-colors duration-200 focus:outline-none"
                   >
-                    <DeleteIcon className="h-5 w-5" />
+                    <DeleteIcon fontSize="small" />
                   </button>
+                  {showDeleteModal && productToDelete && (
+                      <DeleteProductModal
+                        product={productToDelete}
+                        onClose={() => setShowDeleteModal(false)}
+                      />
+                    )}
+
                 </td>
               </tr>
             ))}
