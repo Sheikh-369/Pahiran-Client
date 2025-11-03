@@ -6,7 +6,8 @@ import APIWITHTOKEN from "@/lib/http/APIWithToken";
 import API from "@/lib/http/API";
 
 const initialState:IProductSliceState = {
-    product: null,
+    product:null,
+    allProducts:[],
     categoryProducts: {},
     status:Status.IDLE
 };
@@ -18,6 +19,11 @@ const productSlice = createSlice({
         setProduct(state:IProductSliceState, action:PayloadAction<IProductData>){
             state.product = action.payload;
         },
+    
+        setAllProducts(state: IProductSliceState, action: PayloadAction<IProductData[]>) {
+            state.allProducts = action.payload;
+        },
+
         setStatus(state:IProductSliceState, action:PayloadAction<Status>){
             state.status = action.payload;
         },
@@ -26,7 +32,7 @@ const productSlice = createSlice({
         }
     }
 })
-export const { setProduct, setStatus,setCategoryProducts } = productSlice.actions;
+export const { setProduct, setStatus,setCategoryProducts,setAllProducts } = productSlice.actions;
 export default productSlice.reducer;
 
 //fetch all products
@@ -36,7 +42,7 @@ export function fetchAllProducts() {
         try {
             const response=await APIWITHTOKEN.get("product");
             if(response.status===200){
-                dispatch(setProduct(response.data.product));
+                dispatch(setAllProducts(response.data.products));
                 dispatch(setStatus(Status.SUCCESS));
             }else{
                 dispatch(setStatus(Status.ERROR));

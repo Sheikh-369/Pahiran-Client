@@ -8,6 +8,10 @@ function Navbar() {
   //user login/logout logic
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.authSlice); // ensure slice name matches
+  //cart counter
+  const cartItems = useAppSelector((state) => state.cartSlice.items);
+  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
 
   return (
     <div>
@@ -46,7 +50,7 @@ function Navbar() {
             {/* Logo */}
             <div className="flex items-center">
               <div className="text-2xl font-bold text-gray-900" id="store-name">
-                StyleHub
+                WashTralaya
               </div>
             </div>
             {/* Desktop Navigation */}
@@ -252,6 +256,14 @@ function Navbar() {
                   HOT
                 </span>{" "}
               </a>
+              {/* All Products Link */}
+              <Link
+                href="/products"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
+              >
+                All Products
+              </Link>
+
             </div>
             {/* Search Bar */}
             <div className="hidden md:flex items-center">
@@ -334,9 +346,12 @@ function Navbar() {
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
                   />
                 </svg>
-                <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  2
-                </span>{" "}
+                {totalQuantity > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {totalQuantity}
+                  </span>
+                )}
+                {" "}
               </button>{" "}
               {/* Mobile menu button */}{" "}
               <button
