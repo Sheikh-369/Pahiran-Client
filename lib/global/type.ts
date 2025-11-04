@@ -4,3 +4,22 @@ export enum Status{
     LOADING="loading",
     SUCCESS="success"
 }
+
+export enum PaymentMethods {
+  COD = "cod",
+  QR = "qr",
+}
+
+export enum OrderStatus {
+  Pending = "pending",
+  Confirmed = "confirmed",
+  Shipped = "shipped",
+  Delivered = "delivered",
+  Cancelled = "cancelled",
+}
+
+export enum PaymentStatus {
+  Pending = "pending",
+  Completed = "completed",
+  Failed = "failed",
+}

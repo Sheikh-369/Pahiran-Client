@@ -9,7 +9,9 @@ export interface IUserData{
     OTP?:string,
     userPhoneNumber?:string,
     newPassword?:string,
-    confirmNewPassword?:string
+    confirmNewPassword?:string,
+    role?:string,
+    name?: string;
 }
 
 export interface IUserSliceState{

@@ -54,23 +54,25 @@ export function userLogin(loginData:IUserData){
     return async function userLoginThunk(dispatch:AppDispatch){
         dispatch(setStatus(Status.LOADING))
         try {
-            const response=await API.post("login",loginData)
-            if(response.status===200 || response.status===201){
-                dispatch(setUser(response.data.token))
-                localStorage.setItem("token", response.data.token);
+            const response = await API.post("/login", loginData)
+            if(response.status === 200 || response.status === 201){
+                const { token, data } = response.data
+                dispatch(setUser(data))            // store user object
+                localStorage.setItem("token", token) // store JWT
                 dispatch(setStatus(Status.SUCCESS))
                 return { success: true, message: response.data.message }
-            }else{
+            } else {
                 dispatch(setStatus(Status.ERROR))
                 return { success: false, message: response.data.message || "Something went wrong" }
             }
         } catch (error:any) {
             console.log(error)
             dispatch(setStatus(Status.ERROR))
-            return { success: false, message: error.response?.data?.message || "Registration failed" }
+            return { success: false, message: error.response?.data?.message || "Login failed" }
         }
     }
 }
+
 
 //forgot password
 export function forgotPassword(forgotPasswordData:IUserData){
