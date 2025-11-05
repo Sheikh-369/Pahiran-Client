@@ -8,23 +8,34 @@ import {
   updateItemQuantity,
   deleteCartItems,
 } from "@/lib/store/user/cart/cart-slice";
-import {
-  ShoppingBagIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
+import { ShoppingBagIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  // Fetch cart state from Redux
   const { items, status } = useAppSelector((state) => state.cartSlice);
 
+  // State to track selected items for checkout
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
+  // Fetch cart items on component mount
   useEffect(() => {
     dispatch(fetchCartItems());
   }, [dispatch]);
 
+  // --- Handle checkout with only selected items ---
+  const handleCheckout = () => {
+    if (selectedItems.length === 0) return; // Option 2: checkout only if items are selected
+
+    // Convert selected item IDs to a comma-separated query string
+    const queryParam = selectedItems.join(",");
+    router.push(`/user/dashboard/check-out?items=${queryParam}`);
+  };
+
+  // --- Quantity management ---
   const handleAddQuantity = (cartItemId: string, currentQty: number) => {
     dispatch(updateItemQuantity({ cartItemId, quantity: currentQty + 1 }));
   };
@@ -35,15 +46,13 @@ export default function CartPage() {
     }
   };
 
-  const handleAddToCart = (productId: string) => {
-    dispatch(addToCart(productId, 1));
-  };
-
+  // --- Delete item from cart ---
   const handleDeleteItem = (cartItemId: string) => {
     dispatch(deleteCartItems(cartItemId));
     setSelectedItems((prev) => prev.filter((id) => id !== cartItemId));
   };
 
+  // --- Select / deselect individual item ---
   const handleSelectItem = (cartItemId?: string) => {
     if (!cartItemId) return;
     setSelectedItems((prev) =>
@@ -53,25 +62,26 @@ export default function CartPage() {
     );
   };
 
+  // --- Select or deselect all items ---
   const handleSelectAll = () => {
     const allIds = items.map((item) => item.id).filter((id): id is string => !!id);
     if (selectedItems.length === allIds.length) {
-      setSelectedItems([]);
+      setSelectedItems([]); // deselect all
     } else {
-      setSelectedItems(allIds);
+      setSelectedItems(allIds); // select all
     }
   };
 
-  const getTotalPrice = (filterSelected = false) => {
-    const filteredItems = filterSelected
-      ? items.filter((item) => item.id && selectedItems.includes(item.id))
-      : items;
+  // --- Calculate total price for selected items ---
+  const getTotalPrice = () => {
+    const filteredItems = items.filter((item) => item.id && selectedItems.includes(item.id));
     return filteredItems.reduce(
       (sum, item) => sum + Number(item.product.productPrice) * item.quantity,
       0
     );
   };
 
+  // --- Loading state ---
   if (status === Status.LOADING) {
     return (
       <div className="flex justify-center items-center h-[60vh] text-gray-500">
@@ -87,6 +97,7 @@ export default function CartPage() {
         My Cart
       </h1>
 
+      {/* Empty cart state */}
       {items.length === 0 && status === Status.SUCCESS && (
         <div className="text-gray-600 text-center py-20">
           <ShoppingBagIcon className="mx-auto w-20 h-20 text-gray-300 mb-4" />
@@ -100,18 +111,15 @@ export default function CartPage() {
         </div>
       )}
 
+      {/* Cart items */}
       {items.length > 0 && (
         <div className="grid md:grid-cols-3 gap-8">
-          {/* Cart items */}
           <div className="md:col-span-2 space-y-5">
             {/* Select all checkbox */}
             <div className="flex items-center gap-2 mb-4">
               <input
                 type="checkbox"
-                checked={
-                  selectedItems.length ===
-                  items.filter((item) => item.id).length
-                }
+                checked={selectedItems.length === items.filter((item) => item.id).length}
                 onChange={handleSelectAll}
                 className="w-5 h-5 accent-emerald-600"
               />
@@ -128,6 +136,7 @@ export default function CartPage() {
               )}
             </div>
 
+            {/* Individual cart items */}
             {items.map((item) => (
               <div
                 key={item.id}
@@ -211,28 +220,25 @@ export default function CartPage() {
             <div className="space-y-2 text-gray-600">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>Rs. {getTotalPrice(true).toFixed(2)}</span>
+                <span>Rs. {getTotalPrice().toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>
-                  Rs. {getTotalPrice(true) > 1000 ? "0.00" : "99.00"}
-                </span>
+                <span>Rs. {getTotalPrice() > 1000 ? "0.00" : "99.00"}</span>
               </div>
               <div className="border-t my-3"></div>
               <div className="flex justify-between text-lg font-semibold text-gray-800">
                 <span>Total</span>
                 <span>
-                  Rs. {(
-                    getTotalPrice(true) + (getTotalPrice(true) > 1000 ? 0 : 99)
-                  ).toFixed(2)}
+                  Rs. {(getTotalPrice() + (getTotalPrice() > 1000 ? 0 : 99)).toFixed(2)}
                 </span>
               </div>
             </div>
 
+            {/* Option 2: Proceed only if selected items exist */}
             <button
               disabled={selectedItems.length === 0}
-              onClick={() => router.push("/user/dashboard/check-out")}
+              onClick={handleCheckout}
               className="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Proceed to Checkout

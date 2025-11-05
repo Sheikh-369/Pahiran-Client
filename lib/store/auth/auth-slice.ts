@@ -59,6 +59,7 @@ export function userLogin(loginData:IUserData){
                 const { token, data } = response.data
                 dispatch(setUser(data))            // store user object
                 localStorage.setItem("token", token) // store JWT
+                localStorage.setItem("user", JSON.stringify(data)) // store user
                 dispatch(setStatus(Status.SUCCESS))
                 return { success: true, message: response.data.message }
             } else {
@@ -72,7 +73,6 @@ export function userLogin(loginData:IUserData){
         }
     }
 }
-
 
 //forgot password
 export function forgotPassword(forgotPasswordData:IUserData){

@@ -26,15 +26,18 @@ const orderSlice = createSlice({
 export const { setItems, setStatus } = orderSlice.actions;
 export default orderSlice.reducer;
 
-
- //Thunk: Create Order (COD or QR)
-export function createAnOrder(finalData: IOrderData) {
+//place an order
+export function createAnOrder(finalData: IOrderData | FormData) {
   return async function createAnOrderThunk(dispatch: AppDispatch) {
     dispatch(setStatus(Status.LOADING));
 
     try {
+      const isFormData = finalData instanceof FormData;
+
       const response = await APIWITHTOKEN.post("/order", finalData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": isFormData ? "multipart/form-data" : "application/json",
+        },
       });
 
       if (response.status === 200 || response.status === 201) {
@@ -46,5 +49,5 @@ export function createAnOrder(finalData: IOrderData) {
       console.error("❌ Order creation failed:", error);
       dispatch(setStatus(Status.ERROR));
     }
-  };
+  }
 }

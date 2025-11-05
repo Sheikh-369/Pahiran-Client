@@ -2,12 +2,32 @@
 import { setUser } from "@/lib/store/auth/auth-slice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 function Navbar() {
   const dispatch = useAppDispatch();
+  //for logged in user
   const { user } = useAppSelector((state) => state.authSlice);
+  //for guest users-->Add guest cart items
+  const guestCartItems = useAppSelector((state) => state.guestSlice.items);
+
+  // Determine if user is logged in
+  const isLoggedIn = !!user;
+
   const cartItems = useAppSelector((state) => state.cartSlice.items);
-  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  // Compute total quantity based on user status
+const [totalQuantity, setTotalQuantity] = useState<number>(0);
+
+useEffect(() => {
+  const qty = isLoggedIn
+    ? cartItems.reduce((sum, item) => sum + item.quantity, 0)
+    : guestCartItems.reduce((sum, item) => sum + item.quantity, 0);
+  setTotalQuantity(qty);
+}, [isLoggedIn, cartItems, guestCartItems]);
+
+  //cart items ma jane tarika
+  const cartLink = user ? "/user/dashboard/cart" : "/guest/cart";
+  
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -23,7 +43,7 @@ function Navbar() {
             <span>📞 +9779807915786</span>
             <span>📧 info@clothingstore.com</span>
           </div>
-          <span className="text-sm">Free shipping on orders over $50!</span>
+          <span className="text-sm">Free shipping on orders over Rs. 2500!</span>
         </div>
       </div>
 
@@ -77,14 +97,15 @@ function Navbar() {
             {!user ? (
               <Link
                 href="/auth/login"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className=" text-black px-4 py-2"
               >
                 Login
               </Link>
             ) : (
               <div className="flex items-center gap-4">
                 <span className="text-sm">
-                  Welcome, <span className="font-medium">{user.name || user.userEmail}</span>
+                  Welcome,<br /> 
+                  <span className="text-[9px] font-medium text-blue-600">{user.name || user.userEmail}</span>
                 </span>
                 {user.role === "admin" && (
                   <Link href="/admin/dashboard" className="text-green-600 hover:text-green-700">
@@ -101,7 +122,7 @@ function Navbar() {
             )}
 
             {/* Cart */}
-            <Link href="/user/dashboard/cart" className="relative">
+            <Link href={cartLink} className="relative">
               <svg
                 className="h-6 w-6 text-gray-700 hover:text-blue-600"
                 fill="none"
