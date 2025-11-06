@@ -1,7 +1,4 @@
 "use client";
-
-import React from "react";
-import Link from "next/link";
 import { useAuthGuard } from "@/lib/store/hooks/useAuthGuard";
 import { useAppSelector } from "@/lib/store/hooks/hooks";
 
@@ -9,15 +6,15 @@ export default function DashboardPage() {
   const { checkAuth } = useAuthGuard();
   const { user } = useAppSelector((state) => state.authSlice);
 
-  const isAuthenticated = checkAuth();
+  // const isAuthenticated = checkAuth();
 
-//   if (!isAuthenticated) {
-//     return (
-//       <div className="flex items-center justify-center h-screen">
-//         <p className="text-gray-600 text-sm">Please log in to access your dashboard.</p>
-//       </div>
-//     );
-//   }
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen">
+  //       <p className="text-gray-600 text-sm">Please log in to access your dashboard.</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-gray-100 flex">

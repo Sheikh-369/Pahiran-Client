@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
 import { fetchProductById } from "@/lib/store/product/product-slice";
+import AddToCartButton from "@/app/components/cart/add-to-cart-button";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -11,7 +12,7 @@ export default function ProductDetails() {
   const { product, status } = useAppSelector((store) => store.productSlice);
 
   // Ensure id is a string
-  const id = Array.isArray(params.id) ? params.id[0] : params.id;
+  const id = Array.isArray(params!.id) ? params!.id[0] : params!.id;
 
   useEffect(() => {
     if (id) {
@@ -43,8 +44,8 @@ export default function ProductDetails() {
           />
 
           {/* Professional Cart Icon on Image */}
-          <div className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md cursor-pointer hover:bg-gray-100 transition">
-            <svg
+          <div className="absolute top-2 right-2 p-2 cursor-pointer">
+            {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -57,7 +58,8 @@ export default function ProductDetails() {
                 strokeLinejoin="round"
                 d="M2.25 3h1.386a1 1 0 0 1 .97.757l.813 3.25M6 6h15.75a.75.75 0 0 1 .705 1.038l-2.25 6A.75.75 0 0 1 19.5 14H8.25M6 6L5.106 9.757a.75.75 0 0 0 .705.993H19.5M6 6L5.106 9.757M9 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
               />
-            </svg>
+            </svg> */}
+            <AddToCartButton productId={product.id!} quantity={1} />
           </div>
         </div>
 
@@ -78,26 +80,13 @@ export default function ProductDetails() {
             <p className="text-xl font-semibold text-black">Rs.{product.productPrice}</p>
             {product.productStock > 5 && <p className="text-green-600 font-medium">In Stock</p>}
             {product.productStock <= 5 && product.productStock > 0 && (
-              <p className="text-yellow-600 font-medium">Only {product.productStock} left!</p>
+              <p className="text-orange-900 font-medium">Only {product.productStock} left!</p>
             )}
             {product.productStock === 0 && <p className="text-red-600 font-medium">Out of Stock</p>}
 
             {/* Professional Cart Icon next to Price */}
-            <div className="ml-4 cursor-pointer p-2 rounded-full hover:bg-gray-100 transition" title="Add to Cart">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5 text-gray-800"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2.25 3h1.386a1 1 0 0 1 .97.757l.813 3.25M6 6h15.75a.75.75 0 0 1 .705 1.038l-2.25 6A.75.75 0 0 1 19.5 14H8.25M6 6L5.106 9.757a.75.75 0 0 0 .705.993H19.5M6 6L5.106 9.757M9 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
-                />
-              </svg>
+            <div className="ml-4 cursor-pointer p-2" title="Add to Cart">
+              <AddToCartButton productId={product.id!} quantity={1} />
             </div>
           </div>
 

@@ -10,10 +10,21 @@ import {
 } from "@/lib/store/user/cart/cart-slice";
 import { ShoppingBagIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { useAuthGuard } from "@/lib/store/hooks/useAuthGuard";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  //   const { checkAuth } = useAuthGuard();
+  //   const isAuthenticated = checkAuth();
+
+  // if (!isAuthenticated) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen">
+  //       <p className="text-gray-600 text-sm">Please log in to access your dashboard.</p>
+  //     </div>
+  //   );
+  // }
 
   // Fetch cart state from Redux
   const { items, status } = useAppSelector((state) => state.cartSlice);
