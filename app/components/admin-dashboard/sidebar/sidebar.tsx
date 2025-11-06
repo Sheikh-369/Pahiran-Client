@@ -17,8 +17,8 @@ function AdminSideBar() {
               </div>
             </div>
             <nav className="space-y-2">
-              <a
-                href="#"
+              <Link
+                href="/admin/dashboard"
                 className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg"
               >
                 <svg
@@ -41,9 +41,9 @@ function AdminSideBar() {
                   />
                 </svg>{" "}
                 Dashboard{" "}
-              </a>{" "}
-              <a
-                href="#"
+              </Link>{" "}
+              <Link
+                href="/admin/dashboard/orders"
                 className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <svg
@@ -60,7 +60,7 @@ function AdminSideBar() {
                   />
                 </svg>{" "}
                 Orders{" "}
-              </a>{" "}
+              </Link>{" "}
               <Link
                 href="/admin/dashboard/products"
                 className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"

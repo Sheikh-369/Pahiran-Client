@@ -5,7 +5,7 @@ function UserSidebar() {
   return (
     <>
       {/* Sidebar */}
-      <aside className="w-64 bg-sky-200 shadow-lg border-r border-gray-200 shrink-0">
+      <aside className="w-64 bg-linear-to-b from-[#acade9] via-[#b59ee9] to-[#e0acc6] shadow-lg border-r border-gray-200 shrink-0">
         <div className="p-6">
           {/* Logo + Heading */}
           <div className="flex items-center gap-3 mb-8">

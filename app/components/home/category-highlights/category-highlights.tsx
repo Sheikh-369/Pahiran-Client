@@ -5,17 +5,17 @@ const categories = [
   {
     name: "Gents",
     image: "/gents.jpg",
-    href: "/categories/gents",
+    href: "/categories/Gents Items",
   },
   {
     name: "Ladies",
     image: "/ladies.jpg",
-    href: "/categories/ladies",
+    href: "/categories/Ladies Items",
   },
   {
     name: "Kids",
     image: "/kids.jpg",
-    href: "/categories/kids",
+    href: "/categories/Kids Items",
   }
 ];
 

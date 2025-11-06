@@ -8,6 +8,7 @@ import cartSlice from "../store/user/cart/cart-slice"
 import orderSlice from "../store/user/order/order-slice"
 import guestSlice from "../store/guest/cart-slice"
 import myOrdersSlice from "../store/user/my-orders/my-orders-slice"
+import adminOrdersSlice from "../store/admin/orders/orders-slice"
 
 const store=configureStore({
     reducer:{
@@ -19,7 +20,8 @@ const store=configureStore({
         cartSlice,
         orderSlice,
         guestSlice,
-        myOrdersSlice
+        myOrdersSlice,
+        adminOrdersSlice
     }
 })
 

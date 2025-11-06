@@ -13,7 +13,7 @@ export default function AdminDashboardLayout({
       {/* Main section */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header (extracted from AdminDashboard) */}
-        <header className="bg-sky-300 shadow-sm border-b border-gray-200">
+        <header className="bg-sky-200 shadow-lg border-r border-gray-200 rounded-4xl">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
@@ -37,7 +37,7 @@ export default function AdminDashboardLayout({
         </header>
 
         {/* Page content (children) */}
-        <main className="flex-1 px-6 py-6 overflow-auto bg-gray-50">
+        <main className="flex-1 px-6 py-6 overflow-auto bg-[linear-gradient(135deg,#acade9,#b59ee9,#e0acc6)]">
           {children}
         </main>
       </div>

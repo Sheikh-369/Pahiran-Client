@@ -78,9 +78,10 @@ export default function RootLayout({
   const hideNavbarOn = [
     '/auth/login', '/auth/register', '/auth/forgot-password',
     '/auth/reset-password','/admin/dashboard','/admin/dashboard/products',
+    '/admin/dashboard/categories',
     '/admin/dashboard/sub-categories','/admin/dashboard/customers',
     '/user/dashboard','/user/dashboard/cart','/user/dashboard/check-out',
-    '/user/dashboard/my-orders'
+    '/user/dashboard/my-orders','/admin/dashboard/orders'
   ];
   const shouldHideNavbar = hideNavbarOn.includes(pathname);
 

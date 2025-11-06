@@ -35,7 +35,7 @@ useEffect(() => {
   };
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
+    <nav className="bg-linear-to-r from-[#acade9] via-[#b59ee9] to-[#e0acc6] shadow-lg sticky top-0 z-50">
       {/* Top banner */}
       <div className="bg-gray-900 text-white py-2">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
@@ -57,9 +57,9 @@ useEffect(() => {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/categories/ladies" className="nav-link">Ladies</Link>
-            <Link href="/categories/gents" className="nav-link">Gents</Link>
-            <Link href="/categories/kids" className="nav-link">Kids</Link>
+            <Link href="/categories/Ladies Items" className="nav-link">Ladies</Link>
+            <Link href="/categories/Gents Items" className="nav-link">Gents</Link>
+            <Link href="/categories/Kids Items" className="nav-link">Kids</Link>
             <Link href="/products" className="nav-link">All Products</Link>
             <Link href="/sale" className="text-red-600 font-semibold hover:text-red-700">
               Sale

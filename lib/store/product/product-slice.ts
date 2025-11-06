@@ -40,7 +40,7 @@ export function fetchAllProducts() {
     return async function fetchAllProductsThunk(dispatch: AppDispatch) {
         dispatch(setStatus(Status.LOADING));
         try {
-            const response=await APIWITHTOKEN.get("product");
+            const response=await API.get("product");
             if(response.status===200){
                 dispatch(setAllProducts(response.data.products));
                 dispatch(setStatus(Status.SUCCESS));
@@ -81,7 +81,7 @@ export function fetchProductsByCategory(category: string) {
     dispatch(setStatus(Status.LOADING));
 
     try {
-      const response = await API.get(`product/category/${category}`);
+      const response = await API.get(`products/category/${category}`);
       if (response.status === 200) {
         dispatch(setCategoryProducts({ category, products: response.data.data }));
         dispatch(setStatus(Status.SUCCESS));

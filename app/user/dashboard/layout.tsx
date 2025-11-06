@@ -23,7 +23,7 @@ export default function DashboardLayout({
       {/* Main content area */}
       <div className="flex-1 flex flex-col">
         {/* Top navigation */}
-        <header className="bg-sky-200 shadow-md p-4 flex justify-between items-center">
+        <header className="bg-linear-to-b from-[#acade9] via-[#b59ee9] to-[#e0acc6] shadow-md p-4 flex justify-between items-center">
           <h1 className="text-lg font-semibold text-gray-800">User Dashboard</h1>
 
           <nav className="flex space-x-6 text-sm font-medium text-gray-600">
@@ -33,7 +33,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-8">{children}</main>
+        <main className="flex-1 p-8 bg-[linear-gradient(135deg,#acade9,#b59ee9,#e0acc6)]">{children}</main>
       </div>
     </div>
   );
