@@ -1,7 +1,11 @@
+'use client'
+import { useAppSelector } from "@/lib/store/hooks/hooks";
 import Link from "next/link";
-import React from "react";
+import { useEffect, useState } from "react";
 
 function UserSidebar() {
+  const{user}=useAppSelector(store=>store.authSlice)
+
   return (
     <>
       {/* Sidebar */}
@@ -10,10 +14,10 @@ function UserSidebar() {
           {/* Logo + Heading */}
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-              U
+              {user?.userName ? user.userName[0].toUpperCase() : "U"}
             </div>
             <div>
-              <h2 className="text-lg font-bold text-gray-900">EcomUser</h2>
+              <h2 className="text-lg font-bold text-gray-900">WashTralaya</h2>
               <p className="text-xs text-gray-600">Dashboard</p>
             </div>
           </div>
@@ -151,11 +155,11 @@ function UserSidebar() {
           <div className="mt-8 pt-6 border-t border-gray-200">
             <div className="flex items-center gap-3 px-3 py-2">
               <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                U
+                {user?.userName ? user.userName[0].toUpperCase() : "U"}
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900">User Name</p>
-                <p className="text-xs text-gray-600">user@email.com</p>
+                <p className="text-sm font-medium text-gray-900">{user?.userName}</p>
+                <p className="text-xs text-gray-600">{user?.userEmail}</p>
               </div>
             </div>
           </div>

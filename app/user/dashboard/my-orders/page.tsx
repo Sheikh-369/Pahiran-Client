@@ -5,6 +5,7 @@ import { cancelOrder, myOrders } from "@/lib/store/user/my-orders/my-orders-slic
 import { Status } from "@/lib/global/type";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 const orderStages = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
 
@@ -117,7 +118,7 @@ const MyOrders: React.FC = () => {
             </div>
 
             {/* Products Grid */}
-            <div className="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="px-6 py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {order.orderDetails.map((detail, idx) => (
                 <div
                   key={idx}
@@ -136,7 +137,6 @@ const MyOrders: React.FC = () => {
                 </div>
               ))}
             </div>
-
             {/* Footer */}
             <div className="px-6 py-4 flex justify-between items-center border-t border-gray-200">
               {(order.orderStatus === "pending" || order.orderStatus === "shipped") && (

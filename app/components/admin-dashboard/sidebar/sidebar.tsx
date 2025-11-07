@@ -1,7 +1,12 @@
+'use client'
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks/hooks'
 import Link from 'next/link'
-import React from 'react'
+import { useEffect } from 'react'
 
 function AdminSideBar() {
+  const dispatch=useAppDispatch()
+  const{user}=useAppSelector(store=>store.authSlice)
+
   return (
     <>
               {/* Sidebar */}
@@ -9,10 +14,10 @@ function AdminSideBar() {
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                E
+                {user?.name ? user.name[0].toUpperCase() : "K"}
               </div>
               <div>
-                <h2 className="text-lg font-bold text-gray-900">EcomAdmin</h2>
+                <h2 className="text-lg font-bold text-gray-900">{user?.name}</h2>
                 <p className="text-xs text-gray-600">Dashboard</p>
               </div>
             </div>
@@ -244,13 +249,13 @@ function AdminSideBar() {
             <div className="mt-8 pt-6 border-t border-gray-200">
               <div className="flex items-center gap-3 px-3 py-2">
                 <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                  A
+                  {user?.name ? user.name[0].toUpperCase() : "A"}
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-900">
-                    Admin User
+                    {user?.name}
                   </p>
-                  <p className="text-xs text-gray-600">admin@store.com</p>
+                  <p className="text-xs text-gray-600">{user?.email}</p>
                 </div>
               </div>
             </div>

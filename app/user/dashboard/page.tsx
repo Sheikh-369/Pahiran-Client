@@ -1,39 +1,79 @@
 "use client";
 import { useAuthGuard } from "@/lib/store/hooks/useAuthGuard";
-import { useAppSelector } from "@/lib/store/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
+import { useEffect } from "react";
+import { myOrders } from "@/lib/store/user/my-orders/my-orders-slice";
+import { fetchCartItems } from "@/lib/store/user/cart/cart-slice";
+import { ShoppingBag, ShoppingCart, Heart } from "lucide-react";
 
 export default function DashboardPage() {
+  const dispatch = useAppDispatch();
   const { checkAuth } = useAuthGuard();
   const { user } = useAppSelector((state) => state.authSlice);
+  const { items: cartItems } = useAppSelector((state) => state.cartSlice);
+  const { orders } = useAppSelector((state) => state.myOrdersSlice);
 
-  // const isAuthenticated = checkAuth();
-
-  // if (!isAuthenticated) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen">
-  //       <p className="text-gray-600 text-sm">Please log in to access your dashboard.</p>
-  //     </div>
-  //   );
-  // }
+  useEffect(() => {
+    dispatch(myOrders());
+    dispatch(fetchCartItems());
+  }, [dispatch]);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-
-      {/* Main Content */}
+    <div className="min-h-screen bg-linear-to-br from-indigo-200 via-white to-purple-100 flex rounded-3xl">
       <main className="flex-1 p-8">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">User Dashboard</h1>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Total Orders</h3>
-            <p className="text-2xl font-bold text-indigo-600">12</p>
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight">
+            Welcome,{" "}
+            <span className="text-indigo-600">
+              {user?.userName || user?.userEmail?.split("@")[0] || "User"}
+            </span>
+          </h1>
+          <p className="text-gray-500 mt-1 text-sm">
+            Here's a quick summary of your account activity
+          </p>
+        </div>
+
+        {/* Cards */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Orders */}
+          <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold text-gray-700">
+                Total Orders
+              </h3>
+              <ShoppingBag className="text-indigo-500 w-5 h-5" />
+            </div>
+            <p className="text-3xl font-bold text-indigo-600">
+              {orders?.length || 0}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">Completed & Ongoing</p>
           </div>
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Wishlist Items</h3>
-            <p className="text-2xl font-bold text-indigo-600">5</p>
+
+          {/* Wishlist */}
+          <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold text-gray-700">
+                Wishlist Items
+              </h3>
+              <Heart className="text-pink-500 w-5 h-5" />
+            </div>
+            <p className="text-3xl font-bold text-pink-500">5</p>
+            <p className="text-xs text-gray-400 mt-1">Saved for later</p>
           </div>
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Cart Items</h3>
-            <p className="text-2xl font-bold text-indigo-600">3</p>
+
+          {/* Cart */}
+          <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold text-gray-700">
+                Cart Items
+              </h3>
+              <ShoppingCart className="text-emerald-500 w-5 h-5" />
+            </div>
+            <p className="text-3xl font-bold text-emerald-500">
+              {cartItems?.length || 0}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">Waiting for checkout</p>
           </div>
         </div>
       </main>

@@ -28,4 +28,5 @@ export interface IProductSliceState{
     allProducts:IProductData[],
     status:Status,
     categoryProducts: Record<string, IProductData[]>;
+    featured:IProductData[]
 }

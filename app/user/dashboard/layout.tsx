@@ -24,7 +24,7 @@ export default function DashboardLayout({
       <div className="flex-1 flex flex-col">
         {/* Top navigation */}
         <header className="bg-linear-to-b from-[#acade9] via-[#b59ee9] to-[#e0acc6] shadow-md p-4 flex justify-between items-center">
-          <h1 className="text-lg font-semibold text-gray-800">User Dashboard</h1>
+          <h1 className="text-lg font-semibold text-gray-800">Welcome, {user?.userName}</h1>
 
           <nav className="flex space-x-6 text-sm font-medium text-gray-600">
             <Link href="/" className="hover:text-blue-600 transition">Home</Link>

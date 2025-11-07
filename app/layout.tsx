@@ -31,18 +31,18 @@ export default function RootLayout({
     '/admin/dashboard/categories',
     '/admin/dashboard/sub-categories','/admin/dashboard/customers',
     '/user/dashboard','/user/dashboard/cart','/user/dashboard/check-out',
-    '/user/dashboard/my-orders','/admin/dashboard/orders'
+    '/user/dashboard/my-orders','/admin/dashboard/orders','/user/dashboard/profile'
   ];
   const shouldHideNavbar = hideNavbarOn.includes(pathname!);
 
 
-    const hideFooterOn = [
+  const hideFooterOn = [
     '/auth/login', '/auth/register', '/auth/forgot-password',
     '/auth/reset-password','/admin/dashboard','/admin/dashboard/products',
     '/admin/dashboard/categories',
     '/admin/dashboard/sub-categories','/admin/dashboard/customers',
     '/user/dashboard','/user/dashboard/cart','/user/dashboard/check-out',
-    '/user/dashboard/my-orders','/admin/dashboard/orders'
+    '/user/dashboard/my-orders','/admin/dashboard/orders','/user/dashboard/profile'
   ];
   const shouldHideFooter = hideFooterOn.includes(pathname!);
 

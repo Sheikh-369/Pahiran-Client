@@ -133,3 +133,47 @@ export function fetchAllUsers(){
         }
     }
 }
+
+// Fetch current user
+export function fetchCurrentUser(userId: string) {
+  return async function fetchCurrentUserThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIWITHTOKEN.get(`/customer/${userId}`);
+      if (response.status === 200 || response.status === 201) {
+        dispatch(setUser(response.data.data));
+        dispatch(setStatus(Status.SUCCESS));
+      } else {
+        dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error: any) {
+      console.log(error);
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
+
+// Edit / Update User Profile
+export function updateUserProfile(userId: string, updatedData: FormData) {
+  return async function updateUserProfileThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+    try {
+      const response = await APIWITHTOKEN.patch(`/customer/${userId}`, updatedData, {
+        headers: { "Content-Type": "multipart/form-data" } // for file uploads
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        dispatch(setUser(response.data.user)); // update user in store
+        dispatch(setStatus(Status.SUCCESS));
+        return { success: true, message: response.data.message };
+      } else {
+        dispatch(setStatus(Status.ERROR));
+        return { success: false, message: response.data.message || "Something went wrong" };
+      }
+    } catch (error: any) {
+      console.log(error);
+      dispatch(setStatus(Status.ERROR));
+      return { success: false, message: error.response?.data?.message || "Profile update failed" };
+    }
+  };
+}

@@ -9,7 +9,8 @@ const initialState:IProductSliceState = {
     product:null,
     allProducts:[],
     categoryProducts: {},
-    status:Status.IDLE
+    status:Status.IDLE,
+    featured:[]
 };
 
 const productSlice = createSlice({
@@ -29,10 +30,14 @@ const productSlice = createSlice({
         },
                 setCategoryProducts(state,action: PayloadAction<{ category: string; products: IProductData[] }>) {
             state.categoryProducts[action.payload.category] = action.payload.products;
+        },
+
+        setFeaturedProducts(state, action: PayloadAction<IProductData[]>) {
+          state.featured = action.payload;
         }
     }
 })
-export const { setProduct, setStatus,setCategoryProducts,setAllProducts } = productSlice.actions;
+export const { setProduct, setStatus,setCategoryProducts,setAllProducts,setFeaturedProducts } = productSlice.actions;
 export default productSlice.reducer;
 
 //fetch all products
@@ -84,6 +89,26 @@ export function fetchProductsByCategory(category: string) {
       const response = await API.get(`products/category/${category}`);
       if (response.status === 200) {
         dispatch(setCategoryProducts({ category, products: response.data.data }));
+        dispatch(setStatus(Status.SUCCESS));
+      } else {
+        dispatch(setStatus(Status.ERROR));
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch(setStatus(Status.ERROR));
+    }
+  };
+}
+
+//fetch product by isFeatured
+export function fetchFeaturedProducts() {
+  return async function fetchFeaturedProductsThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(Status.LOADING));
+
+    try {
+      const response = await API.get('products/featured'); // your backend endpoint
+      if (response.status === 200) {
+        dispatch(setFeaturedProducts(response.data.data)); // IMPORTANT: dispatch action to update state here
         dispatch(setStatus(Status.SUCCESS));
       } else {
         dispatch(setStatus(Status.ERROR));
