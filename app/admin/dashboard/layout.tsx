@@ -1,7 +1,10 @@
 'use client'
 import AdminSideBar from "@/app/components/admin-dashboard/sidebar/sidebar";
 import { useAppSelector } from "@/lib/store/hooks/hooks";
+import { useAuthGuard } from "@/lib/store/hooks/useAuthGuard";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function AdminDashboardLayout({
   children,
@@ -9,6 +12,16 @@ export default function AdminDashboardLayout({
   children: React.ReactNode;
 }) {
   const{user}=useAppSelector(store=>store.authSlice)
+    const router=useRouter()
+  
+    //restricting un-authorized user from entering dashboard
+    const { checkAuth } = useAuthGuard();
+    useEffect(() => {
+      if (!checkAuth()) {
+        router.replace("/auth/login"); // redirect if not logged in
+      }
+    }, [checkAuth, router]);
+
   return (
     <div className="min-h-full flex">
       {/* Sidebar */}

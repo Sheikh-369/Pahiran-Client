@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useAppSelector } from "@/lib/store/hooks/hooks";
 import { useAuthGuard } from "@/lib/store/hooks/useAuthGuard";
 import UserSidebar from "@/app/components/user/sidebar/user-sidebar";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({
   children,
@@ -12,8 +13,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { user } = useAppSelector((state) => state.authSlice);
+  const router=useRouter()
+
+  //restricting un-authorized user from entering dashboard
   const { checkAuth } = useAuthGuard();
-  const isAuthenticated = checkAuth();
+  useEffect(() => {
+    if (!checkAuth()) {
+      router.replace("/auth/login"); // redirect if not logged in
+    }
+  }, [checkAuth, router]);
 
   return (
     <div className="min-h-screen flex bg-gray-100 rounded-4xl">

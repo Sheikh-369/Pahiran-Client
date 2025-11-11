@@ -5,18 +5,25 @@ import { useEffect } from "react";
 import { myOrders } from "@/lib/store/user/my-orders/my-orders-slice";
 import { fetchCartItems } from "@/lib/store/user/cart/cart-slice";
 import { ShoppingBag, ShoppingCart, Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
+  const router=useRouter()
   const { checkAuth } = useAuthGuard();
   const { user } = useAppSelector((state) => state.authSlice);
   const { items: cartItems } = useAppSelector((state) => state.cartSlice);
   const { orders } = useAppSelector((state) => state.myOrdersSlice);
 
   useEffect(() => {
+      if (!checkAuth(() => {})) {
+        // If user is not logged in, redirect to login
+        router.replace("/auth/login");
+        return; // Stop running any further code in useEffect
+      }
     dispatch(myOrders());
     dispatch(fetchCartItems());
-  }, [dispatch]);
+  }, [dispatch,checkAuth, router]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-200 via-white to-purple-100 flex rounded-3xl">

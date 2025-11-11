@@ -93,9 +93,15 @@ export function fetchProductsByCategory(category: string) {
       } else {
         dispatch(setStatus(Status.ERROR));
       }
-    } catch (error) {
-      console.error(error);
-      dispatch(setStatus(Status.ERROR));
+    } catch (error:any) {
+        if (error.response?.status === 404) {
+          // No products found → just set empty array
+          dispatch(setCategoryProducts({ category, products: [] }));
+          dispatch(setStatus(Status.SUCCESS));
+        } else {
+          console.error(error);
+          dispatch(setStatus(Status.ERROR));
+        }
     }
   };
 }
