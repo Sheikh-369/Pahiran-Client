@@ -5,6 +5,8 @@ import { createAnOrder } from "@/lib/store/user/order/order-slice";
 import { IOrderProduct } from "@/lib/store/user/order/order-slice-type";
 import { PaymentMethods } from "@/lib/global/type";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
 
 export default function CheckoutPage() {
   const dispatch = useAppDispatch();
@@ -106,6 +108,7 @@ export default function CheckoutPage() {
   const total = subtotal + shipping;
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="max-w-6xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-gray-900">Checkout</h1>
 
@@ -293,5 +296,6 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 }
