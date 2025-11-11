@@ -30,7 +30,7 @@ const OrderDetailsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const params = useParams();
-  const id = Array.isArray(params.id) ? params.id[0] : params.id; // ensure string
+  const id = Array.isArray(params!.id) ? params!.id[0] : params!.id; // ensure string
 
   const { selectedOrder, status } = useAppSelector((state) => state.myOrdersSlice);
 
